@@ -273,7 +273,15 @@ function initClickHeat()
 		clickHeatServer = clickHeatServer.substring(domain.length, clickHeatServer.length);
 	}
 	/** Add onmousedown event using listeners */
-	addEvtListener(document, 'mousedown', catchClickHeat);
+	addEvtListener(document, 'mousedown', function(e){
+	    if (e.target.nodeName === "INPUT" && e.target.attributes["type"].nodeValue === "button"
+	       || e.target.nodeName === "INPUT" && e.target.attributes["type"].nodeValue === "submit"
+	       || e.target.nodeName === "A" || e.target.parentElement.nodeName === "A") {
+	        catchClickHeat(e);
+	    } else {
+	       setTimeout(function(){catchClickHeat(e);}, 1000);
+	    }
+	});
 	/** Add onfocus event on iframes (mostly ads) - Does NOT work with Gecko-powered browsers, because onfocus doesn't exist on iframes */
 	iFrames = document.getElementsByTagName('iframe');
 	for (i = 0; i < iFrames.length; i += 1)
